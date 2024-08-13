@@ -9,8 +9,8 @@ export default function Home() {
           <Image
             src="/logo.png"
             alt="Artause Logo"
-            width={256}
-            height={64}
+            width={555}
+            height={161}
             priority
           />
         </div>        
@@ -25,8 +25,8 @@ export default function Home() {
           <Image
             src="/kakao_login_medium_narrow.png"
             alt="카카오 로그인"
-            width={183}
-            height={45}
+            width={266}
+            height={64}
           />
         </Button>
       </div>
