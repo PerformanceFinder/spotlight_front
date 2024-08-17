@@ -14,6 +14,11 @@
 
 # 정적 파일 처리를 위한 리다이렉트 규칙
 [[redirects]]
+  from = "/*.(png|jpg|jpeg|gif|svg|ico)"
+  to = "/:splat"
+  status = 200
+  
+[[redirects]]
   from = "/_next/*"
   to = "/_next/:splat"
   status = 200
