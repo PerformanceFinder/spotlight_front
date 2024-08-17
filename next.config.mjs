@@ -2,7 +2,9 @@
 const nextConfig = {
     // Netlify에서 사용할 수 있도록 출력 설정
     output: 'standalone',
-  
+    images: {
+        unoptimized: true,
+      },
     // API 라우트를 위한 리워이트 설정
     rewrites: async () => {
       return [
