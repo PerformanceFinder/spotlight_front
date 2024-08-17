@@ -33,4 +33,4 @@
   node_bundler = "esbuild"
 
 [build.environment]
-  NODE_VERSION = "14"  # 또는 더 높은 버전
+  NODE_VERSION = "18"  # 또는 더 높은 버전
