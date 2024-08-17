@@ -28,3 +28,9 @@
   from = "/*"
   to = "/_next/static/chunks/pages/index.js"
   status = 200
+
+[functions]
+  node_bundler = "esbuild"
+
+[build.environment]
+  NODE_VERSION = "14"  # 또는 더 높은 버전
