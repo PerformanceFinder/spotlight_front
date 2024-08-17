@@ -1,4 +1,3 @@
-// pages/api/kakao-callback.js
 export default async function handler(req, res) {
   const { code } = req.query;
 
@@ -23,8 +22,7 @@ export default async function handler(req, res) {
 
     // 토큰 데이터를 사용하여 필요한 처리를 수행 (예: 사용자 정보 저장)
 
-    // 리디렉션 방식 변경
-    res.setHeader('Set-Cookie', `kakaoToken=${tokenData.access_token}; Path=/; HttpOnly; Secure`);
+    // 리디렉션
     res.writeHead(302, { Location: '/form' });
     res.end();
   } catch (error) {
