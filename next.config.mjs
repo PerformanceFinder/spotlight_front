@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     // Netlify에서 사용할 수 있도록 출력 설정
-    output: 'standalone',
+    output: 'export',
     images: {
         unoptimized: true,
       },
