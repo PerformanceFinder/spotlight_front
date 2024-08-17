@@ -32,8 +32,8 @@ export default function Home() {
           <img
             src="/kakao_login_medium_narrow.png"
             alt="카카오 로그인"
-            width={266}
-            height={64}
+            width={240}
+            height={54}
             onClick={kakaoLogin}
             style={{ cursor: 'pointer' }}
           />
