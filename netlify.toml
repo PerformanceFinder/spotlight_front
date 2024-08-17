@@ -6,13 +6,25 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# API 요청을 Netlify Functions로 리다이렉트
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
+# 정적 파일 처리를 위한 리다이렉트 규칙
+[[redirects]]
+  from = "/_next/*"
+  to = "/_next/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/static/*"
+  to = "/static/:splat"
+  status = 200
+
+# Next.js 페이지 라우팅을 위한 리다이렉트
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/_next/static/chunks/pages/index.js"
   status = 200
-  force = false

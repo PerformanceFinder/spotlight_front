@@ -5,6 +5,7 @@ const nextConfig = {
     images: {
         unoptimized: true,
       },
+    assetPrefix: '/',
     // API 라우트를 위한 리워이트 설정
     rewrites: async () => {
       return [
