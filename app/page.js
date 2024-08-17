@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from 'next/image';
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -18,17 +19,19 @@ export default function Home() {
           그동안 몰랐던, 하지만 나에게 딱 맞는<br />
           공연을 추천해드려요!
         </p>
-        <Button
-          variant="default"
-          className="p-0 overflow-hidden"
-        >
-          <Image
-            src="/kakao_login_medium_narrow.png"
-            alt="카카오 로그인"
-            width={266}
-            height={64}
-          />
-        </Button>
+        <Link href="/form">
+          <Button
+            variant="default"
+            className="p-0 overflow-hidden"
+          >
+            <Image
+              src="/kakao_login_medium_narrow.png"
+              alt="카카오 로그인"
+              width={266}
+              height={64}
+            />
+          </Button>
+        </Link>
       </div>
     </div>
   );
