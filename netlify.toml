@@ -1,28 +1,16 @@
 [build]
   command = "npm run build"
   publish = ".next"
+  functions = "netlify/functions"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# API 요청을 Netlify Functions로 리다이렉트
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
-# 정적 파일 (이미지 등)에 대한 처리
-[[redirects]]
-  from = "/_next/static/*"
-  to = "/_next/static/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/static/*"
-  to = "/static/:splat"
-  status = 200
-
-# 나머지 모든 요청을 index.html로 리다이렉트 (SPA 동작을 위해)
 [[redirects]]
   from = "/*"
   to = "/index.html"
