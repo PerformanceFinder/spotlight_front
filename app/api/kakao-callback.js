@@ -2,13 +2,12 @@
 export default async function handler(req, res) {
   const { code } = req.query;
 
-  if (!code) 
-  {
+  if (!code) {
     return res.status(400).json({ error: 'Missing authorization code' });
   }
 
   try {
-    // 여기서 code를 사용하여 액세스 토큰을 요청합니다
+    // 토큰 요청 부분은 그대로 유지
     const tokenResponse = await fetch('https://kauth.kakao.com/oauth/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -22,11 +21,12 @@ export default async function handler(req, res) {
 
     const tokenData = await tokenResponse.json();
 
-    // 토큰을 사용하여 사용자 정보를 요청할 수 있습니다
-    // 여기서 추가 로직을 구현하세요 (예: 사용자 정보 저장, 세션 생성 등)
+    // 토큰 데이터를 사용하여 필요한 처리를 수행 (예: 사용자 정보 저장)
 
-    // 로그인 성공 후 리디렉션
-    res.redirect('/form');  // 또는 다른 적절한 페이지로 리디렉션
+    // 리디렉션 방식 변경
+    res.setHeader('Set-Cookie', `kakaoToken=${tokenData.access_token}; Path=/; HttpOnly; Secure`);
+    res.writeHead(302, { Location: '/form' });
+    res.end();
   } catch (error) {
     console.error('Error during Kakao login:', error);
     res.status(500).json({ error: 'Internal server error' });
