@@ -2,9 +2,17 @@
 
 import { useState } from "react";
 
+
+
 export function FormPage() {
-  const tokenData = JSON.parse(sessionStorage.getItem('tokenData'));
-  console.log(tokenData);
+  
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const tokenData = sessionStorage.getItem('tokenData');
+      console.log(tokenData);
+    }
+  }, []);
+
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPlays, setSelectedPlays] = useState([]);
   
