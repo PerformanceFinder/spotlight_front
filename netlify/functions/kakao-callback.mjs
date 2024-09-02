@@ -25,7 +25,6 @@ export const handler = async (event, context) =>
     });
 
     const tokenData = await tokenResponse.json();
-    alert(tokenData);
     // 토큰 데이터를 사용하여 필요한 처리를 수행 (예: 사용자 정보 저장)
 
     // 클라이언트 사이드 리다이렉션을 위한 HTML 응답
@@ -38,6 +37,7 @@ export const handler = async (event, context) =>
         <html>
           <head>
             <script>
+              sessionStorage.setItem('tokenData', '${JSON.stringify(tokenData)}');
               window.location.href = '/form';
             </script>
           </head>
