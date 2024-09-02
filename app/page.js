@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import Image from 'next/image';
+import { LoginForm } from '@/components/component/loginform';
 
 export default function Home() {
   const kakaoLogin = () => {
@@ -39,6 +39,7 @@ export default function Home() {
           />
         </Button>
       </div>
+      <LoginForm/>
     </div>
   );
 }

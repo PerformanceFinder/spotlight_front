@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { FormPage } from '@/components/component/formpage'; // Import the FormPage component
+import { FormPage } from '@/components/component/formpage';
 
 export default function Form() {
   useEffect(() => {
