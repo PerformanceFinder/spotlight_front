@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button"
+import { useRouter } from 'next/navigation';
 
 export function FormPage() {
   const [plays, setPlays] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPlays, setSelectedPlays] = useState([]);
+  const router = useRouter();
   
   useEffect(() => {
     fetchPlays();
@@ -21,10 +23,10 @@ export function FormPage() {
     try {
       const response = await fetch('https://artause.co.kr/api/data');
       const data = await response.json();
-      setPlays(data.map((play, index) => ({
-        id: index + 1,
+      setPlays(data.map((play) => ({
+        id: play.mt20id,
         title: play.prfnm,
-        category: "all", // 카테고리 정보가 없으므로 모두 'all'로 설정
+        category: "all",
         image: play.poster,
         description: play.sty
       })));
@@ -48,8 +50,8 @@ export function FormPage() {
   };
   
   const handleRecommendationClick = () => {
-    // 여기에 추천 연극 확인 로직을 추가하세요
-    console.log("추천 연극 확인하기 버튼이 클릭되었습니다.");
+    const selectedIds = selectedPlays.join(',');
+    router.push(`https://artause.co.kr/userselect?plays=${selectedIds}`);
   };
   
   return (
