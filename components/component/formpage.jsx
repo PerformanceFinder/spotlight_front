@@ -51,7 +51,7 @@ export function FormPage() {
   
   const handleRecommendationClick = () => {
     const selectedIds = selectedPlays.join(',');
-    router.push(`https://artause.co.kr/userselect?plays=${selectedIds}`);
+    router.push(`/result?plays=${selectedIds}`);
   };
   
   return (
