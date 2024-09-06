@@ -1,17 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 export function ResultPage() {
   const [recommendedPlays, setRecommendedPlays] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    const fetchRecommendations = async () => {
-      const { plays } = router.query;
-      if (plays) {
+    const plays = searchParams.get('plays');
+    
+    if (plays) {
+      const fetchRecommendations = async () => {
         try {
           const response = await fetch(`https://artause.co.kr/userselect?plays=${plays}`);
           const data = await response.json();
@@ -21,17 +22,11 @@ export function ResultPage() {
         } finally {
           setIsLoading(false);
         }
-      }
-    };
+      };
 
-    if (router.isReady) {
       fetchRecommendations();
     }
-  }, [router.isReady, router.query]);
-
-  if (!router.isReady) {
-    return <div>Loading...</div>;
-  }
+  }, [searchParams]);
 
   if (isLoading) {
     return <div>Loading...</div>;
