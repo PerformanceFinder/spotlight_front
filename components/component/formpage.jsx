@@ -9,6 +9,11 @@ export function FormPage() {
   
   useEffect(() => {
     fetchPlays();
+
+    if (typeof window !== "undefined") {
+      const tokenData = sessionStorage.getItem('tokenData');
+      console.log(tokenData);
+    }
   }, []);
 
   const fetchPlays = async () => {
