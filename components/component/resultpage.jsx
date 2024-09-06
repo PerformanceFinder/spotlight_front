@@ -15,10 +15,11 @@ function SearchResult() {
   );
 }
 
-export default function ResultPage() {
+export function ResultPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <SearchResult />
     </Suspense>
   );
 }
+
