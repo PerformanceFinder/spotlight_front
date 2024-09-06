@@ -29,6 +29,10 @@ export function ResultPage() {
     }
   }, [router.isReady, router.query]);
 
+  if (!router.isReady) {
+    return <div>Loading...</div>;
+  }
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
