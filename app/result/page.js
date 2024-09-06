@@ -10,7 +10,7 @@ export default function Form() {
 
   return (
     <div>
-      <ResultPage />
+      <ResultPage/>
     </div>
   );
 }

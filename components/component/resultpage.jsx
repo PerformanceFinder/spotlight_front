@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-export default function ResultPage() {
+export function ResultPage() {
   const [recommendedPlays, setRecommendedPlays] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
