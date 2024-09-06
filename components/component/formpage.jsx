@@ -2,71 +2,33 @@
 
 import { useState, useEffect } from "react";
 
-
-
 export function FormPage() {
-  
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const tokenData = sessionStorage.getItem('tokenData');
-      console.log(tokenData);
-    }
-  }, []);
-
+  const [plays, setPlays] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPlays, setSelectedPlays] = useState([]);
   
+  useEffect(() => {
+    fetchPlays();
+  }, []);
+
+  const fetchPlays = async () => {
+    try {
+      const response = await fetch('https://artause.co.kr/api/data');
+      const data = await response.json();
+      setPlays(data.map((play, index) => ({
+        id: index + 1,
+        title: play.prfnm,
+        category: "all", // 카테고리 정보가 없으므로 모두 'all'로 설정
+        image: play.poster,
+        description: play.sty
+      })));
+    } catch (error) {
+      console.error("Error fetching plays:", error);
+    }
+  };
+
   const categories = [
     { id: "all", name: "All" },
-    { id: "drama", name: "Drama" },
-    { id: "comedy", name: "Comedy" },
-    { id: "musical", name: "Musical" },
-    { id: "tragedy", name: "Tragedy" },
-  ];
-
-  const plays = [
-    {
-      id: 1,
-      title: "Hamlet",
-      category: "drama",
-      image: "/placeholder.svg",
-      description: "A classic Shakespearean tragedy about a prince seeking revenge.",
-    },
-    {
-      id: 2,
-      title: "The Importance of Being Earnest",
-      category: "comedy",
-      image: "/placeholder.svg",
-      description: "A witty and satirical comedy of manners by Oscar Wilde.",
-    },
-    {
-      id: 3,
-      title: "Les Misérables",
-      category: "musical",
-      image: "/placeholder.svg",
-      description: "A sweeping musical drama set in 19th-century France.",
-    },
-    {
-      id: 4,
-      title: "Oedipus Rex",
-      category: "tragedy",
-      image: "/placeholder.svg",
-      description: "A Greek tragedy about a man who unknowingly fulfills a prophecy.",
-    },
-    {
-      id: 5,
-      title: "A Midsummer Night's Dream",
-      category: "comedy",
-      image: "/placeholder.svg",
-      description: "A whimsical Shakespearean comedy about love and magic.",
-    },
-    {
-      id: 6,
-      title: "Fiddler on the Roof",
-      category: "musical",
-      image: "/placeholder.svg",
-      description: "A beloved musical about a Jewish family in early 20th-century Russia.",
-    },
   ];
 
   const filteredPlays = selectedCategory === "all" ? plays : plays.filter((play) => play.category === selectedCategory);
