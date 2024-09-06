@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 
 function SearchResult() {
   const searchParams = useSearchParams();
-  const keyword = searchParams.get('keyword');  // 쿼리 파라미터에서 'keyword' 값 가져오기
+  const keyword = searchParams.get('plays');  // 쿼리 파라미터에서 'keyword' 값 가져오기
 
   return (
     <div>
