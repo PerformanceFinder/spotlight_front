@@ -1,16 +1,14 @@
-"use client";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-
-export function ResultPage() {
+export default function ResultPage() {
   const [recommendedPlays, setRecommendedPlays] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      const plays = searchParams.get('plays');
+      const { plays } = router.query;
       if (plays) {
         try {
           const response = await fetch(`https://artause.co.kr/userselect?plays=${plays}`);
@@ -24,8 +22,10 @@ export function ResultPage() {
       }
     };
 
-    fetchRecommendations();
-  }, [searchParams]);
+    if (router.isReady) {
+      fetchRecommendations();
+    }
+  }, [router.isReady, router.query]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -46,8 +46,8 @@ export function ResultPage() {
               <img
                 src={play.poster || "/placeholder.svg"}
                 alt={`${play.prfnm} 포스터`}
-                width="400"
-                height="300"
+                width={400}
+                height={300}
                 className="rounded-lg object-cover"
                 style={{ aspectRatio: "400/300", objectFit: "cover" }}
               />
