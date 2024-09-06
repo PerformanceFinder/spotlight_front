@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 export function ResultPage() {
@@ -61,5 +61,13 @@ export function ResultPage() {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function PageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResultPage />
+    </Suspense>
   );
 }
