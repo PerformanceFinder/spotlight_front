@@ -39,7 +39,6 @@ export default function Home() {
           />
         </Button>
       </div>
-      <LoginForm/>
     </div>
   );
 }
