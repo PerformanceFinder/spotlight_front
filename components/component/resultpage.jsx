@@ -3,35 +3,45 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { Suspense } from 'react';
+import { Loading } from '@/components/component/loading';
 
 function SearchResult() {
   const searchParams = useSearchParams();
   const keyword = searchParams.get('plays');
   const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const fetchPlays = async () => {
+  const fetchPlays = async () => 
+  {
+    setIsLoading(true);
     try {
       const response = await fetch(`https://artause.co.kr/userselect?plays=${keyword}`);
       const result = await response.json();
       setData(result);
     } catch (error) {
       console.error("Error fetching plays:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  useEffect(() => {
+  useEffect(() => 
+  {
     fetchPlays();
   }, [keyword]);
 
+  if (isLoading) 
+  {
+    return <Loading />;
+  }
+
   return (
     <div>
-      <h1>Search Page</h1>
-      <p>Search Keyword: {keyword}</p>
       <div>
         {data ? (
-          <pre>{JSON.stringify(data, null, 2)}</pre> // JSON 형태로 데이터를 보기 좋게 표시
+          <pre>{JSON.stringify(data, null, 2)}</pre>
         ) : (
-          <p>Loading data...</p>
+          <p>No data available.</p>
         )}
       </div>
     </div>
@@ -40,7 +50,7 @@ function SearchResult() {
 
 export function ResultPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loading />}>
       <SearchResult />
     </Suspense>
   );
