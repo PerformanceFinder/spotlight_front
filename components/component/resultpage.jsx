@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Suspense } from 'react';
 import { Loading } from '@/components/component/loading';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 function SearchResult() {
   const searchParams = useSearchParams();
@@ -41,8 +42,16 @@ function SearchResult() {
                 <img src={play.poster} alt={play.prfnm} className="w-full h-64 object-cover rounded-lg mb-4" />
                 <h3 className="text-xl font-bold mb-2">{play.prfnm}</h3>
               </CardContent>
-              <CardFooter className="bg-gray-100 p-4 rounded-b-lg">
-                <p className="text-sm text-gray-600 line-clamp-3">{play.sty || "작품설명 없음"}</p>
+              <CardFooter className="bg-gray-100 p-4 rounded-b-lg flex flex-col items-start">
+                <p className="text-sm text-gray-600 line-clamp-3 mb-4">{play.sty || "작품설명 없음"}</p>
+                {play.relateurl1 && (
+                  <Button 
+                    onClick={() => window.open(play.relateurl1, '_blank')}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    연극 예매하기!
+                  </Button>
+                )}
               </CardFooter>
             </Card>
           ))
