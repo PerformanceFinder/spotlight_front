@@ -8,14 +8,16 @@ export function FormPage() {
   const [plays, setPlays] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPlays, setSelectedPlays] = useState([]);
+  const [tokenData, setTokenData] = useState(null);
   const router = useRouter();
   
   useEffect(() => {
     fetchPlays();
 
     if (typeof window !== "undefined") {
-      const tokenData = sessionStorage.getItem('tokenData');
-      console.log(tokenData);
+      const storedTokenData = sessionStorage.getItem('tokenData');
+      setTokenData(storedTokenData);
+      console.log(storedTokenData);
     }
   }, []);
 
@@ -49,9 +51,35 @@ export function FormPage() {
     }
   };
   
-  const handleRecommendationClick = () => {
+  const handleRecommendationClick = async () => {
     const selectedIds = selectedPlays.join(',');
-    router.push(`/result?plays=${selectedIds}`);
+    
+    try {
+      const response = await fetch('https://artause.co.kr/userinfo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          selectedIds,
+          tokenData,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to send data');
+      }
+      
+      // If you need to handle the response, you can do so here
+      // const data = await response.json();
+      // console.log(data);
+      
+      // Navigate to the result page after successful data submission
+      router.push(`/result?plays=${selectedIds}`);
+    } catch (error) {
+      console.error("Error sending data:", error);
+      // Handle the error appropriately (e.g., show an error message to the user)
+    }
   };
   
   return (
@@ -124,7 +152,6 @@ export function FormPage() {
           추천 연극 확인하러 가기!
         </Button>
       </div>
-
     </div>
   );
 }
