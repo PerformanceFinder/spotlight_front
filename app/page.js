@@ -21,8 +21,8 @@ export default function Home() {
         />
         </div>        
         <p className="mb-6 text-lg text-gray-700">
-          그동안 몰랐던, 하지만 나에게 딱 맞는<br />
-          공연을 추천해드려요!
+          그동안 몰랐던, 하지만 <strong>나에게 딱 맞는</strong><br />
+          <strong>공연</strong>을 추천해드려요!
         </p>
         <Button
           variant="default"

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
-export function LoginForm() {
+export function LoginForm({ onSubmit }) {
   const [formData, setFormData] = React.useState({
     fullName: '',
     gender: '',
@@ -30,8 +30,8 @@ export function LoginForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
     console.log('Form submitted:', formData);
+    onSubmit(formData.fullName); // 이름을 상위 컴포넌트로 전달
   };
 
   return (
@@ -44,10 +44,10 @@ export function LoginForm() {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="fullName">이름 <span className="text-red-500">*필수</span></Label>
-            <Input 
-              id="fullName" 
-              placeholder="Enter your full name" 
-              required 
+            <Input
+              id="fullName"
+              placeholder="Enter your full name"
+              required
               value={formData.fullName}
               onChange={handleInputChange}
             />
@@ -66,21 +66,21 @@ export function LoginForm() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="birthday">생일 <span className="text-red-500">*필수</span></Label>
-            <Input 
-              id="birthday" 
-              type="date" 
-              required 
+            <Input
+              id="birthday"
+              type="date"
+              required
               value={formData.birthday}
               onChange={handleInputChange}
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="phone">전화번호 <span className="text-red-500">*필수</span></Label>
-            <Input 
-              id="phone" 
-              type="tel" 
-              placeholder="Enter your phone number" 
-              required 
+            <Input
+              id="phone"
+              type="tel"
+              placeholder="Enter your phone number"
+              required
               value={formData.phone}
               onChange={handleInputChange}
             />
