@@ -38,7 +38,7 @@ export const handler = async (event, context) =>
           <head>
             <script>
               sessionStorage.setItem('tokenData', '${JSON.stringify(tokenData)}');
-              window.location.href = '/form';
+              window.location.href = '/region';
             </script>
           </head>
           <body>
