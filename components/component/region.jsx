@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, createContext, useContext } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 
 const regions = {
