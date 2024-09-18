@@ -78,17 +78,14 @@ export const RegionProvider = ({ children }) => {
   );
 };
 
-export function useRegionContext() {
-  return useContext(RegionContext);
-}
-
 export function RegionSelection() {
-  const { selectedRegion, setSelectedRegion, selectedArea, setSelectedArea } = useRegionContext();
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedArea, setSelectedArea] = useState('');
   const router = useRouter();
 
   const handleRegionSelect = (region) => {
     setSelectedRegion(region);
-    setSelectedArea(''); // 지역 변경 시 구역 선택 초기화
+    setSelectedArea(''); // Reset area selection when region changes
   };
 
   const handleAreaSelect = (area) => {
