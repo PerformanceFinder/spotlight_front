@@ -9,6 +9,8 @@ export function FormPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPlays, setSelectedPlays] = useState([]);
   const [tokenData, setTokenData] = useState(null);
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedArea, setSelectedArea] = useState('');
   const router = useRouter();
   
   useEffect(() => {
@@ -16,8 +18,12 @@ export function FormPage() {
 
     if (typeof window !== "undefined") {
       const storedTokenData = sessionStorage.getItem('tokenData');
+      const storedRegion = sessionStorage.getItem('selectedRegion');
+      const storedArea = sessionStorage.getItem('selectedArea');
       setTokenData(storedTokenData);
-      console.log(storedTokenData);
+      setSelectedRegion(storedRegion);
+      setSelectedArea(storedArea);
+      console.log(storedTokenData, storedRegion, storedArea);
     }
   }, []);
 
@@ -63,6 +69,8 @@ export function FormPage() {
         body: JSON.stringify({
           selectedIds,
           tokenData,
+          selectedRegion,
+          selectedArea,
         }),
       });
       
@@ -70,15 +78,11 @@ export function FormPage() {
         throw new Error('Failed to send data');
       }
       
-      // If you need to handle the response, you can do so here
-      // const data = await response.json();
-      // console.log(data);
-      
-      // Navigate to the result page after successful data submission
+      // 성공적인 데이터 제출 후 결과 페이지로 이동합니다
       router.push(`/result?plays=${selectedIds}`);
     } catch (error) {
       console.error("Error sending data:", error);
-      // Handle the error appropriately (e.g., show an error message to the user)
+      // 에러를 적절히 처리합니다 (예: 사용자에게 에러 메시지 표시)
     }
   };
   

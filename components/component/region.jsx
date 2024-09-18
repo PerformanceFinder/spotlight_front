@@ -85,7 +85,7 @@ export function RegionSelection() {
 
   const handleRegionSelect = (region) => {
     setSelectedRegion(region);
-    setSelectedArea(''); // Reset area selection when region changes
+    setSelectedArea(''); // 지역이 변경되면 구역 선택을 초기화합니다
   };
 
   const handleAreaSelect = (area) => {
@@ -94,6 +94,9 @@ export function RegionSelection() {
 
   const handleSubmit = () => {
     if (selectedRegion && selectedArea) {
+      // 선택된 지역과 구역을 sessionStorage에 저장합니다
+      sessionStorage.setItem('selectedRegion', selectedRegion);
+      sessionStorage.setItem('selectedArea', selectedArea);
       router.push('/form');
     } else {
       alert('지역과 구역을 모두 선택해주세요.');
