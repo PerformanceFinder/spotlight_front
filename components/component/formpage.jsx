@@ -102,7 +102,7 @@ export function FormPage() {
     <div className="container mx-auto py-8 px-4 md:px-6">
       <div className="grid md:grid-cols-[240px_1fr] gap-8">
         <div className="bg-card rounded-lg p-4 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4">Categories</h2>
+          <h2 className="text-lg font-semibold mb-4">연극 카테고리</h2>
           <div className="grid gap-2">
             {categories.map((category) => (
               <button
