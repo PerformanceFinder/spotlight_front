@@ -10,8 +10,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 export function FormPage() {
-  const [plays, setPlays] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [plays, setPlays] = useState({});
   const [selectedPlays, setSelectedPlays] = useState([]);
   const [tokenData, setTokenData] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -19,6 +18,8 @@ export function FormPage() {
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
   
+  const genres = ["로맨스", "코미디", "공포", "추리", "고전", "어린이", "시대극", "버라이어티", "기타"];
+
   useEffect(() => {
     fetchPlays();
     checkMobile();
@@ -45,23 +46,38 @@ export function FormPage() {
     try {
       const response = await fetch('https://artause.co.kr/api/data');
       const data = await response.json();
-      setPlays(data.map((play) => ({
-        id: play.mt20id,
-        title: play.prfnm,
-        category: "all",
-        image: play.poster,
-        description: play.syn
-      })));
+      const categorizedPlays = genres.reduce((acc, genre) => {
+        acc[genre] = [];
+        return acc;
+      }, {});
+      
+      data.forEach((play) => {
+        const playGenres = play.pergen.split(',').map(g => g.trim());
+        playGenres.forEach((genre) => {
+          if (categorizedPlays[genre]) {
+            categorizedPlays[genre].push({
+              id: play.mt20id,
+              title: play.prfnm,
+              image: play.poster,
+              description: play.syn
+            });
+          } else {
+            if (!categorizedPlays['기타']) categorizedPlays['기타'] = [];
+            categorizedPlays['기타'].push({
+              id: play.mt20id,
+              title: play.prfnm,
+              image: play.poster,
+              description: play.syn
+            });
+          }
+        });
+      });
+      
+      setPlays(categorizedPlays);
     } catch (error) {
       console.error("Error fetching plays:", error);
     }
   };
-
-  const categories = [
-    { id: "all", name: "All" },
-  ];
-
-  const filteredPlays = selectedCategory === "all" ? plays : plays.filter((play) => play.category === selectedCategory);
 
   const handlePlaySelection = (playId) => {
     if (selectedPlays.includes(playId)) {
@@ -100,49 +116,30 @@ export function FormPage() {
   
   return (
     <div className="container mx-auto py-8 px-4 md:px-6">
-      <div className="grid md:grid-cols-[240px_1fr] gap-8">
-        <div className="bg-card rounded-lg p-4 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4">연극 카테고리</h2>
-          <div className="grid gap-2">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                className={`px-4 py-2 rounded-md transition-colors hover:bg-muted ${
-                  selectedCategory === category.id
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-card text-card-foreground"
-                }`}
-                onClick={() => setSelectedCategory(category.id)}
-              >
-                {category.name}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="w-full overflow-hidden">
-          {isMobile ? (
+      <div className="space-y-8">
+        {genres.map((genre) => (
+          <div key={genre} className="w-full overflow-hidden">
+            <h2 className="text-2xl font-semibold mb-4">{genre}</h2>
             <Swiper
               modules={[Navigation, Pagination]}
               spaceBetween={10}
-              slidesPerView={1}
+              slidesPerView={isMobile ? 1 : 3}
               navigation
               pagination={{ clickable: true }}
               className="w-full pb-12"
             >
-              {filteredPlays.map((play) => (
+              {plays[genre]?.map((play) => (
                 <SwiperSlide key={play.id} className="w-full">
-                  <PlayCard play={play} isSelected={selectedPlays.includes(play.id)} onSelect={handlePlaySelection} />
+                  <PlayCard 
+                    play={play} 
+                    isSelected={selectedPlays.includes(play.id)} 
+                    onSelect={handlePlaySelection} 
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPlays.map((play) => (
-                <PlayCard key={play.id} play={play} isSelected={selectedPlays.includes(play.id)} onSelect={handlePlaySelection} />
-              ))}
-            </div>
-          )}
-        </div>
+          </div>
+        ))}
       </div>
       
       <div className={`${isMobile ? 'static mt-8 w-full' : 'fixed bottom-8 right-8'} z-50`}>
