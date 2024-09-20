@@ -3,6 +3,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 export function FormPage() {
   const [plays, setPlays] = useState([]);
@@ -11,10 +16,13 @@ export function FormPage() {
   const [tokenData, setTokenData] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState('');
   const [selectedArea, setSelectedArea] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
   
   useEffect(() => {
     fetchPlays();
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
 
     if (typeof window !== "undefined") {
       const storedTokenData = sessionStorage.getItem('tokenData');
@@ -25,7 +33,13 @@ export function FormPage() {
       setSelectedArea(storedArea);
       console.log(storedTokenData, storedRegion, storedArea);
     }
+
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  const checkMobile = () => {
+    setIsMobile(window.innerWidth <= 768);
+  };
 
   const fetchPlays = async () => {
     try {
@@ -78,11 +92,9 @@ export function FormPage() {
         throw new Error('Failed to send data');
       }
       
-      // 성공적인 데이터 제출 후 결과 페이지로 이동합니다
       router.push(`/result?plays=${selectedIds}`);
     } catch (error) {
       console.error("Error sending data:", error);
-      // 에러를 적절히 처리합니다 (예: 사용자에게 에러 메시지 표시)
     }
   };
   
@@ -107,45 +119,27 @@ export function FormPage() {
             ))}
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredPlays.map((play) => (
-            <div
-              key={play.id}
-              className={`bg-card rounded-lg overflow-hidden shadow-sm group ${
-                selectedPlays.includes(play.id) ? "relative" : ""
-              }`}
-              onClick={() => handlePlaySelection(play.id)}
-            >
-              <div
-                className={`w-full h-48 object-cover transition-opacity duration-300 ${
-                  selectedPlays.includes(play.id) ? "opacity-50" : ""
-                }`}
-              >
-                <img
-                  src={play.image}
-                  alt={play.title}
-                  width={400}
-                  height={300}
-                  className="w-full h-full object-cover"
-                  style={{ aspectRatio: "400/300", objectFit: "cover" }}
-                />
-              </div>
-              {selectedPlays.includes(play.id) && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-primary text-primary-foreground rounded-full p-4">
-                    <CheckIcon className="w-6 h-6" />
-                  </div>
-                </div>
-              )}
-              <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2">{play.title}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                  {play.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        {isMobile ? (
+          <Swiper
+            modules={[Navigation, Pagination]}
+            spaceBetween={10}
+            slidesPerView={1}
+            navigation
+            pagination={{ clickable: true }}
+          >
+            {filteredPlays.map((play) => (
+              <SwiperSlide key={play.id}>
+                <PlayCard play={play} isSelected={selectedPlays.includes(play.id)} onSelect={handlePlaySelection} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredPlays.map((play) => (
+              <PlayCard key={play.id} play={play} isSelected={selectedPlays.includes(play.id)} onSelect={handlePlaySelection} />
+            ))}
+          </div>
+        )}
       </div>
       
       <div className="fixed bottom-8 right-8 z-50">
@@ -155,6 +149,45 @@ export function FormPage() {
         >
           추천 연극 확인하러 가기!
         </Button>
+      </div>
+    </div>
+  );
+}
+
+function PlayCard({ play, isSelected, onSelect }) {
+  return (
+    <div
+      className={`bg-card rounded-lg overflow-hidden shadow-sm group ${
+        isSelected ? "relative" : ""
+      }`}
+      onClick={() => onSelect(play.id)}
+    >
+      <div
+        className={`w-full h-48 object-cover transition-opacity duration-300 ${
+          isSelected ? "opacity-50" : ""
+        }`}
+      >
+        <img
+          src={play.image}
+          alt={play.title}
+          width={400}
+          height={300}
+          className="w-full h-full object-cover"
+          style={{ aspectRatio: "400/300", objectFit: "cover" }}
+        />
+      </div>
+      {isSelected && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="bg-primary text-primary-foreground rounded-full p-4">
+            <CheckIcon className="w-6 h-6" />
+          </div>
+        </div>
+      )}
+      <div className="p-4">
+        <h3 className="text-lg font-semibold mb-2">{play.title}</h3>
+        <p className="text-sm text-muted-foreground line-clamp-2">
+          {play.description}
+        </p>
       </div>
     </div>
   );
