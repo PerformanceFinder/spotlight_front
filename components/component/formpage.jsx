@@ -50,7 +50,7 @@ export function FormPage() {
         title: play.prfnm,
         category: "all",
         image: play.poster,
-        description: play.sty
+        description: play.syn
       })));
     } catch (error) {
       console.error("Error fetching plays:", error);
