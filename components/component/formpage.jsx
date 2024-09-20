@@ -127,7 +127,7 @@ export function FormPage() {
               slidesPerView={1}
               navigation
               pagination={{ clickable: true }}
-              className="w-full"
+              className="w-full pb-12" // Added padding-bottom
             >
               {filteredPlays.map((play) => (
                 <SwiperSlide key={play.id} className="w-full">
@@ -145,9 +145,9 @@ export function FormPage() {
         </div>
       </div>
       
-      <div className="fixed bottom-8 right-8 z-50">
+      <div className={`${isMobile ? 'static mt-8 w-full' : 'fixed bottom-8 right-8'} z-50`}>
         <Button
-          className="bg-black text-white hover:bg-gray-800 transition-colors"
+          className={`bg-black text-white hover:bg-gray-800 transition-colors ${isMobile ? 'w-full' : ''}`}
           onClick={handleRecommendationClick}
         >
           추천 연극 확인하러 가기!
