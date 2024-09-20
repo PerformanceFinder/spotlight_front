@@ -119,27 +119,30 @@ export function FormPage() {
             ))}
           </div>
         </div>
-        {isMobile ? (
-          <Swiper
-            modules={[Navigation, Pagination]}
-            spaceBetween={10}
-            slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-          >
-            {filteredPlays.map((play) => (
-              <SwiperSlide key={play.id}>
-                <PlayCard play={play} isSelected={selectedPlays.includes(play.id)} onSelect={handlePlaySelection} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredPlays.map((play) => (
-              <PlayCard key={play.id} play={play} isSelected={selectedPlays.includes(play.id)} onSelect={handlePlaySelection} />
-            ))}
-          </div>
-        )}
+        <div className="w-full overflow-hidden"> {/* Added wrapper div with full width and overflow hidden */}
+          {isMobile ? (
+            <Swiper
+              modules={[Navigation, Pagination]}
+              spaceBetween={10}
+              slidesPerView={1}
+              navigation
+              pagination={{ clickable: true }}
+              className="w-full" // Ensure Swiper takes full width
+            >
+              {filteredPlays.map((play) => (
+                <SwiperSlide key={play.id} className="w-full"> {/* Ensure each slide takes full width */}
+                  <PlayCard play={play} isSelected={selectedPlays.includes(play.id)} onSelect={handlePlaySelection} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredPlays.map((play) => (
+                <PlayCard key={play.id} play={play} isSelected={selectedPlays.includes(play.id)} onSelect={handlePlaySelection} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
       
       <div className="fixed bottom-8 right-8 z-50">
@@ -170,10 +173,7 @@ function PlayCard({ play, isSelected, onSelect }) {
         <img
           src={play.image}
           alt={play.title}
-          width={400}
-          height={300}
           className="w-full h-full object-cover"
-          style={{ aspectRatio: "400/300", objectFit: "cover" }}
         />
       </div>
       {isSelected && (
