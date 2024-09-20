@@ -114,30 +114,51 @@ export function FormPage() {
     }
   };
   
+  const renderPlays = (genrePlays) => {
+    if (isMobile) {
+      return (
+        <Swiper
+          modules={[Navigation, Pagination]}
+          spaceBetween={10}
+          slidesPerView={1}
+          navigation
+          pagination={{ clickable: true }}
+          className="w-full pb-12"
+        >
+          {genrePlays.map((play) => (
+            <SwiperSlide key={play.id} className="w-full">
+              <PlayCard 
+                play={play} 
+                isSelected={selectedPlays.includes(play.id)} 
+                onSelect={handlePlaySelection} 
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      );
+    } else {
+      return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {genrePlays.map((play) => (
+            <PlayCard 
+              key={play.id} 
+              play={play} 
+              isSelected={selectedPlays.includes(play.id)} 
+              onSelect={handlePlaySelection} 
+            />
+          ))}
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="container mx-auto py-8 px-4 md:px-6">
       <div className="space-y-8">
         {genres.map((genre) => (
           <div key={genre} className="w-full overflow-hidden">
             <h2 className="text-2xl font-semibold mb-4">{genre}</h2>
-            <Swiper
-              modules={[Navigation, Pagination]}
-              spaceBetween={10}
-              slidesPerView={isMobile ? 1 : 3}
-              navigation
-              pagination={{ clickable: true }}
-              className="w-full pb-12"
-            >
-              {plays[genre]?.map((play) => (
-                <SwiperSlide key={play.id} className="w-full">
-                  <PlayCard 
-                    play={play} 
-                    isSelected={selectedPlays.includes(play.id)} 
-                    onSelect={handlePlaySelection} 
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            {renderPlays(plays[genre] || [])}
           </div>
         ))}
       </div>
