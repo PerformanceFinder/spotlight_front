@@ -172,11 +172,11 @@ function PlayCard({ play, isSelected, onSelect }) {
       }`}
       onClick={handleClick}
     >
-      <div className="relative w-full h-48">
+      <div className="relative w-full pb-[150%]"> {/* 2:3 aspect ratio */}
         <img
           src={play.image}
           alt={play.title}
-          className={`w-full h-full object-cover transition-all duration-300 ${
+          className={`absolute top-0 left-0 w-full h-full object-cover transition-all duration-300 ${
             showDescription ? "blur-sm" : ""
           }`}
         />
