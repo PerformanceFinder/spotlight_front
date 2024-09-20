@@ -127,7 +127,7 @@ export function FormPage() {
               slidesPerView={1}
               navigation
               pagination={{ clickable: true }}
-              className="w-full pb-12" // Added padding-bottom
+              className="w-full pb-12"
             >
               {filteredPlays.map((play) => (
                 <SwiperSlide key={play.id} className="w-full">
@@ -172,7 +172,7 @@ function PlayCard({ play, isSelected, onSelect }) {
       }`}
       onClick={handleClick}
     >
-      <div className="relative w-full pb-[150%]"> {/* 2:3 aspect ratio */}
+      <div className="relative w-full pb-[150%]">
         <img
           src={play.image}
           alt={play.title}
@@ -187,15 +187,20 @@ function PlayCard({ play, isSelected, onSelect }) {
             </p>
           </div>
         )}
+        {isSelected && (
+          <div className="absolute top-2 right-2 flex flex-col items-center">
+            <div className="bg-primary text-primary-foreground rounded-full p-2 mb-1">
+              <CheckIcon className="w-4 h-4" />
+            </div>
+            <span className="text-xs font-semibold bg-white px-1 py-0.5 rounded">
+              {play.title}
+            </span>
+          </div>
+        )}
       </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold mb-2">{play.title}</h3>
       </div>
-      {isSelected && (
-        <div className="absolute top-2 right-2 bg-primary text-primary-foreground rounded-full p-2">
-          <CheckIcon className="w-4 h-4" />
-        </div>
-      )}
     </div>
   );
 }
