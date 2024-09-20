@@ -119,7 +119,7 @@ export function FormPage() {
             ))}
           </div>
         </div>
-        <div className="w-full overflow-hidden"> {/* Added wrapper div with full width and overflow hidden */}
+        <div className="w-full overflow-hidden">
           {isMobile ? (
             <Swiper
               modules={[Navigation, Pagination]}
@@ -127,10 +127,10 @@ export function FormPage() {
               slidesPerView={1}
               navigation
               pagination={{ clickable: true }}
-              className="w-full" // Ensure Swiper takes full width
+              className="w-full"
             >
               {filteredPlays.map((play) => (
-                <SwiperSlide key={play.id} className="w-full"> {/* Ensure each slide takes full width */}
+                <SwiperSlide key={play.id} className="w-full">
                   <PlayCard play={play} isSelected={selectedPlays.includes(play.id)} onSelect={handlePlaySelection} />
                 </SwiperSlide>
               ))}
@@ -158,37 +158,44 @@ export function FormPage() {
 }
 
 function PlayCard({ play, isSelected, onSelect }) {
+  const [showDescription, setShowDescription] = useState(false);
+
+  const handleClick = () => {
+    onSelect(play.id);
+    setShowDescription(!showDescription);
+  };
+
   return (
     <div
-      className={`bg-card rounded-lg overflow-hidden shadow-sm group ${
-        isSelected ? "relative" : ""
+      className={`bg-card rounded-lg overflow-hidden shadow-sm group relative ${
+        isSelected ? "ring-2 ring-primary" : ""
       }`}
-      onClick={() => onSelect(play.id)}
+      onClick={handleClick}
     >
-      <div
-        className={`w-full h-48 object-cover transition-opacity duration-300 ${
-          isSelected ? "opacity-50" : ""
-        }`}
-      >
+      <div className="relative w-full h-48">
         <img
           src={play.image}
           alt={play.title}
-          className="w-full h-full object-cover"
+          className={`w-full h-full object-cover transition-all duration-300 ${
+            showDescription ? "blur-sm" : ""
+          }`}
         />
-      </div>
-      {isSelected && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="bg-primary text-primary-foreground rounded-full p-4">
-            <CheckIcon className="w-6 h-6" />
+        {showDescription && (
+          <div className="absolute inset-0 flex items-center justify-center p-4 bg-black bg-opacity-50">
+            <p className="text-white text-sm overflow-y-auto max-h-full">
+              {play.description}
+            </p>
           </div>
-        </div>
-      )}
+        )}
+      </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold mb-2">{play.title}</h3>
-        <p className="text-sm text-muted-foreground line-clamp-2">
-          {play.description}
-        </p>
       </div>
+      {isSelected && (
+        <div className="absolute top-2 right-2 bg-primary text-primary-foreground rounded-full p-2">
+          <CheckIcon className="w-4 h-4" />
+        </div>
+      )}
     </div>
   );
 }
