@@ -33,7 +33,7 @@ export default function Home() {
           <div className="space-y-6">
             <Button variant="default" className="p-0 overflow-hidden" onClick={kakaoLogin}>
               <img
-                src="/kakao_login_medium_narrow.png"
+                src="/kakao_login_large_wide.png"
                 alt="카카오 로그인"
                 width={240}
                 height={54}
