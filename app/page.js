@@ -20,7 +20,7 @@ export default function Home() {
           </div>
 
           <h1 className="mb-8 text-4xl font-extrabold leading-tight text-gray-900 md:text-6xl lg:text-7xl">
-            <span className="block">나에게 딱 맞는 모든 연극을</span>
+            <span className="block">나에게 딱 맞는 연극을</span>
             <span className="block mt-2 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
               모두 경험해보세요!
             </span>
