@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
+import { Header } from "@/components/component/header";
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -202,6 +204,7 @@ export function FormPage() {
 
   return (
     <div className="container mx-auto py-8 px-4 md:px-6">
+      <Header/>
       {renderContent()}
       
       <div className={`${isMobile ? 'static mt-8 w-full' : 'fixed bottom-8 right-8'} z-50`}>
