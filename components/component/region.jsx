@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState, createContext, useContext } from 'react';
+// 중복된 import 제거
+import { useState, createContext, useContext } from 'react';
 import { useRouter } from 'next/navigation';
+
 import { Button } from "@/components/ui/button";
 
 const regions = {
