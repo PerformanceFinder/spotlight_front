@@ -25,14 +25,14 @@ export default function Home() {
           </div>
 
           <h1 className="mb-8 text-4xl font-extrabold leading-tight text-gray-900 md:text-6xl lg:text-7xl">
-            <span className="block">Spotlight의 모든 것을</span>
+            <span className="block">나에게 딱 맞는 모든 연극을</span>
             <span className="block mt-2 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-              끊김 없이 즐기세요.
+              모두 경험해보세요!
             </span>
           </h1>
 
           <p className="mb-12 text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto">
-            Spotlight에서 광고 없이 콘텐츠를 감상하고, 오프라인 재생, 그리고 백그라운드 재생
+            Spotlight이 직접 취향을 분석해 맞춤 연극을 추천해드려요!
           </p>
 
           <div className="space-y-6">
