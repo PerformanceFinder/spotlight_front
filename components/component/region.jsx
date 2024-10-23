@@ -99,9 +99,6 @@ export function RegionSelection() {
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <img src="/api/placeholder/128/40" alt="Logo" className="h-10 w-32 object-contain" />
-          </div>
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             추천받고 싶은 공연장 위치 선택
           </h1>
