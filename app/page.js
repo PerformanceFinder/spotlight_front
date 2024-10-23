@@ -17,11 +17,6 @@ export default function Home() {
       <main className="container mx-auto px-4 py-24 text-center relative z-10">
         <div className="max-w-3xl mx-auto">
           <div className="mb-8 transform hover:scale-105 transition-transform duration-300">
-            <img
-              src="/api/placeholder/180/30"
-              alt="Premium Service"
-              className="mx-auto w-44"
-            />
           </div>
 
           <h1 className="mb-8 text-4xl font-extrabold leading-tight text-gray-900 md:text-6xl lg:text-7xl">
@@ -47,8 +42,12 @@ export default function Home() {
               />
             </Button>
             <p className="text-sm text-gray-600 max-w-md mx-auto">
-              무료 체험 기간이 끝난 후 요금이 부과됩니다. 언제든지 해지할 수 있습니다.
+              Spotlight 카카오톡 채널을 통해 맞춤형 연극을 제공해드립니다. 
             </p>
+            <p className="text-sm text-gray-600 max-w-md mx-auto">
+              카카오톡 채널 수신 거부 시 연극 정보 제공이 어렵습니다. 
+            </p>
+
           </div>
         </div>
       </main>
