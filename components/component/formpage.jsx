@@ -203,8 +203,10 @@ export function FormPage() {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 md:px-6">
+    <div>
       <Header/>
+    <div className="container mx-auto py-8 px-4 md:px-6">
+      
       {renderContent()}
       
       <div className={`${isMobile ? 'static mt-8 w-full' : 'fixed bottom-8 right-8'} z-50`}>
@@ -215,6 +217,7 @@ export function FormPage() {
           추천 연극 확인하러 가기!
         </Button>
       </div>
+    </div>
     </div>
   );
 }
