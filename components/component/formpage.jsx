@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -18,6 +18,9 @@ export function FormPage() {
   const [selectedRegion, setSelectedRegion] = useState('');
   const [selectedArea, setSelectedArea] = useState('');
   const [isMobile, setIsMobile] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const loader = useRef(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -32,7 +35,6 @@ export function FormPage() {
       setTokenData(storedTokenData);
       setSelectedRegion(storedRegion);
       setSelectedArea(storedArea);
-      console.log(storedTokenData, storedRegion, storedArea);
     }
 
     return () => window.removeEventListener('resize', checkMobile);
@@ -59,6 +61,69 @@ export function FormPage() {
       console.error("Error fetching plays:", error);
     }
   };
+
+  const loadMorePlays = useCallback(async () => {
+    if (isLoading) return;
+
+    try {
+      setIsLoading(true);
+      
+      let url;
+      if (selectedPlays.length > 0) {
+        // 선택된 연극이 있는 경우 추천 API 호출
+        const selectedIds = selectedPlays.join(',');
+        url = `https://artause.co.kr/userselect?plays=${selectedIds}`;
+      } else {
+        // 선택된 연극이 없는 경우 기본 20개 로드
+        url = `https://artause.co.kr/api/data?page=${page}&limit=20`;
+      }
+
+      const response = await fetch(url);
+      const newPlays = await response.json();
+      
+      // 새로운 연극들을 기존 배열에 추가
+      if (Array.isArray(newPlays)) {
+        setPlays(prevPlays => [...prevPlays, ...newPlays.map(play => ({
+          id: play.mt20id,
+          title: play.prfnm,
+          image: play.poster,
+          description: play.sty || play.syn // sty가 있으면 사용, 없으면 syn 사용
+        }))]);
+        setPage(prev => prev + 1);
+      }
+    } catch (error) {
+      console.error("Error loading more plays:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading, page, selectedPlays]);
+
+  // Intersection Observer 설정
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 1.0
+    };
+
+    const observer = new IntersectionObserver(entries => {
+      const first = entries[0];
+      if (first.isIntersecting) {
+        loadMorePlays();
+      }
+    }, options);
+
+    const currentLoader = loader.current;
+    if (currentLoader) {
+      observer.observe(currentLoader);
+    }
+
+    return () => {
+      if (currentLoader) {
+        observer.unobserve(currentLoader);
+      }
+    };
+  }, [loadMorePlays]);
 
   const handlePlaySelection = (playId) => {
     if (selectedPlays.includes(playId)) {
@@ -98,36 +163,46 @@ export function FormPage() {
   const renderPlays = () => {
     if (isMobile) {
       return (
-        <Swiper
-          modules={[Navigation, Pagination]}
-          spaceBetween={10}
-          slidesPerView={1}
-          navigation
-          pagination={{ clickable: true }}
-          className="w-full pb-12"
-        >
-          {plays.map((play) => (
-            <SwiperSlide key={play.id} className="w-full">
+        <div>
+          <Swiper
+            modules={[Navigation, Pagination]}
+            spaceBetween={10}
+            slidesPerView={1}
+            navigation
+            pagination={{ clickable: true }}
+            className="w-full pb-12"
+          >
+            {plays.map((play) => (
+              <SwiperSlide key={play.id} className="w-full">
+                <PlayCard 
+                  play={play} 
+                  isSelected={selectedPlays.includes(play.id)} 
+                  onSelect={handlePlaySelection} 
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <div ref={loader} className="h-10 flex items-center justify-center">
+            {isLoading && <div>Loading...</div>}
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {plays.map((play) => (
               <PlayCard 
+                key={play.id} 
                 play={play} 
                 isSelected={selectedPlays.includes(play.id)} 
                 onSelect={handlePlaySelection} 
               />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      );
-    } else {
-      return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {plays.map((play) => (
-            <PlayCard 
-              key={play.id} 
-              play={play} 
-              isSelected={selectedPlays.includes(play.id)} 
-              onSelect={handlePlaySelection} 
-            />
-          ))}
+            ))}
+          </div>
+          <div ref={loader} className="h-10 flex items-center justify-center">
+            {isLoading && <div>Loading...</div>}
+          </div>
         </div>
       );
     }
