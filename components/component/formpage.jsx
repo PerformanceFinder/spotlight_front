@@ -12,16 +12,13 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 export function FormPage() {
-  const [plays, setPlays] = useState({});
+  const [plays, setPlays] = useState([]);
   const [selectedPlays, setSelectedPlays] = useState([]);
   const [tokenData, setTokenData] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState('');
   const [selectedArea, setSelectedArea] = useState('');
   const [isMobile, setIsMobile] = useState(false);
-  const [selectedGenre, setSelectedGenre] = useState('전체');
   const router = useRouter();
-  
-  const genres = ["전체", "로맨스", "코미디", "공포", "추리", "고전", "어린이", "시대극", "버라이어티", "기타"];
 
   useEffect(() => {
     fetchPlays();
@@ -49,39 +46,15 @@ export function FormPage() {
     try {
       const response = await fetch('https://artause.co.kr/api/data');
       const data = await response.json();
-      const categorizedPlays = genres.reduce((acc, genre) => {
-        acc[genre] = [];
-        return acc;
-      }, {});
       
-      data.forEach((play) => {
-        const playGenres = play.pergen.split(',').map(g => g.trim());
-        categorizedPlays['전체'].push({
-          id: play.mt20id,
-          title: play.prfnm,
-          image: play.poster,
-          description: play.syn
-        });
-        playGenres.forEach((genre) => {
-          if (categorizedPlays[genre]) {
-            categorizedPlays[genre].push({
-              id: play.mt20id,
-              title: play.prfnm,
-              image: play.poster,
-              description: play.syn
-            });
-          } else {
-            categorizedPlays['기타'].push({
-              id: play.mt20id,
-              title: play.prfnm,
-              image: play.poster,
-              description: play.syn
-            });
-          }
-        });
-      });
+      const formattedPlays = data.map(play => ({
+        id: play.mt20id,
+        title: play.prfnm,
+        image: play.poster,
+        description: play.syn
+      }));
       
-      setPlays(categorizedPlays);
+      setPlays(formattedPlays);
     } catch (error) {
       console.error("Error fetching plays:", error);
     }
@@ -122,7 +95,7 @@ export function FormPage() {
     }
   };
   
-  const renderPlays = (genrePlays) => {
+  const renderPlays = () => {
     if (isMobile) {
       return (
         <Swiper
@@ -133,7 +106,7 @@ export function FormPage() {
           pagination={{ clickable: true }}
           className="w-full pb-12"
         >
-          {genrePlays.map((play) => (
+          {plays.map((play) => (
             <SwiperSlide key={play.id} className="w-full">
               <PlayCard 
                 play={play} 
@@ -147,7 +120,7 @@ export function FormPage() {
     } else {
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {genrePlays.map((play) => (
+          {plays.map((play) => (
             <PlayCard 
               key={play.id} 
               play={play} 
@@ -160,64 +133,21 @@ export function FormPage() {
     }
   };
 
-  const renderContent = () => {
-    if (isMobile) {
-      return (
-        <div className="space-y-8">
-          {genres.slice(1).map((genre) => (
-            <div key={genre} className="w-full overflow-hidden">
-              <h2 className="text-2xl font-semibold mb-4">{genre}</h2>
-              {renderPlays(plays[genre] || [])}
-            </div>
-          ))}
-        </div>
-      );
-    } else {
-      return (
-        <div className="grid md:grid-cols-[240px_1fr] gap-8">
-          <div className="bg-card rounded-lg p-4 shadow-sm">
-            <h2 className="text-lg font-semibold mb-4">연극 카테고리</h2>
-            <div className="grid gap-2">
-              {genres.map((genre) => (
-                <button
-                  key={genre}
-                  className={`px-4 py-2 rounded-md transition-colors hover:bg-muted ${
-                    selectedGenre === genre
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-card text-card-foreground"
-                  }`}
-                  onClick={() => setSelectedGenre(genre)}
-                >
-                  {genre}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="w-full overflow-hidden">
-            <h2 className="text-2xl font-semibold mb-4">{selectedGenre}</h2>
-            {renderPlays(plays[selectedGenre] || [])}
-          </div>
-        </div>
-      );
-    }
-  };
-
   return (
     <div>
       <Header/>
-    <div className="container mx-auto py-8 px-4 md:px-6">
-      
-      {renderContent()}
-      
-      <div className={`${isMobile ? 'static mt-8 w-full' : 'fixed bottom-8 right-8'} z-50`}>
-        <Button
-          className={`bg-black text-white hover:bg-gray-800 transition-colors ${isMobile ? 'w-full' : ''}`}
-          onClick={handleRecommendationClick}
-        >
-          추천 연극 확인하러 가기!
-        </Button>
+      <div className="container mx-auto py-8 px-4 md:px-6">
+        {renderPlays()}
+        
+        <div className={`${isMobile ? 'static mt-8 w-full' : 'fixed bottom-8 right-8'} z-50`}>
+          <Button
+            className={`bg-black text-white hover:bg-gray-800 transition-colors ${isMobile ? 'w-full' : ''}`}
+            onClick={handleRecommendationClick}
+          >
+            추천 연극 확인하러 가기!
+          </Button>
+        </div>
       </div>
-    </div>
     </div>
   );
 }
