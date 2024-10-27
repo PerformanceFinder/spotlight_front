@@ -13,6 +13,7 @@ import 'swiper/css/pagination';
 
 export function FormPage() {
   const [plays, setPlays] = useState([]);
+  const [displayedIds, setDisplayedIds] = useState(new Set()); // 이미 표시된 ID들을 추적
   const [selectedPlays, setSelectedPlays] = useState([]);
   const [tokenData, setTokenData] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -20,6 +21,7 @@ export function FormPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true); // 더 불러올 데이터가 있는지 추적
   const loader = useRef(null);
   const router = useRouter();
 
@@ -44,6 +46,27 @@ export function FormPage() {
     setIsMobile(window.innerWidth <= 768);
   };
 
+  const addNewPlaysWithoutDuplicates = (newPlays) => {
+    const uniquePlays = newPlays.filter(play => !displayedIds.has(play.mt20id));
+    
+    if (uniquePlays.length === 0) {
+      setHasMore(false);
+      return false;
+    }
+
+    const newIds = new Set(uniquePlays.map(play => play.mt20id));
+    setDisplayedIds(prev => new Set([...prev, ...newIds]));
+    
+    setPlays(prevPlays => [...prevPlays, ...uniquePlays.map(play => ({
+      id: play.mt20id,
+      title: play.prfnm,
+      image: play.poster,
+      description: play.sty || play.syn
+    }))]);
+
+    return true;
+  };
+
   const fetchPlays = async () => {
     try {
       const response = await fetch('https://artause.co.kr/api/data');
@@ -57,13 +80,14 @@ export function FormPage() {
       }));
       
       setPlays(formattedPlays);
+      setDisplayedIds(new Set(formattedPlays.map(play => play.id)));
     } catch (error) {
       console.error("Error fetching plays:", error);
     }
   };
 
   const loadMorePlays = useCallback(async () => {
-    if (isLoading) return;
+    if (isLoading || !hasMore) return;
 
     try {
       setIsLoading(true);
@@ -81,25 +105,24 @@ export function FormPage() {
       const response = await fetch(url);
       const newPlays = await response.json();
       
-      // 새로운 연극들을 기존 배열에 추가
       if (Array.isArray(newPlays)) {
-        setPlays(prevPlays => [...prevPlays, ...newPlays.map(play => ({
-          id: play.mt20id,
-          title: play.prfnm,
-          image: play.poster,
-          description: play.sty || play.syn // sty가 있으면 사용, 없으면 syn 사용
-        }))]);
-        setPage(prev => prev + 1);
+        const hasNewPlays = addNewPlaysWithoutDuplicates(newPlays);
+        if (hasNewPlays) {
+          setPage(prev => prev + 1);
+        }
       }
     } catch (error) {
       console.error("Error loading more plays:", error);
+      setHasMore(false);
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, page, selectedPlays]);
+  }, [isLoading, page, selectedPlays, hasMore, displayedIds]);
 
   // Intersection Observer 설정
   useEffect(() => {
+    if (!hasMore) return;
+
     const options = {
       root: null,
       rootMargin: "20px",
@@ -123,7 +146,7 @@ export function FormPage() {
         observer.unobserve(currentLoader);
       }
     };
-  }, [loadMorePlays]);
+  }, [loadMorePlays, hasMore]);
 
   const handlePlaySelection = (playId) => {
     if (selectedPlays.includes(playId)) {
@@ -131,6 +154,8 @@ export function FormPage() {
     } else {
       setSelectedPlays([...selectedPlays, playId]);
     }
+    // 선택이 변경될 때 hasMore를 true로 리셋하여 새로운 추천을 가능하게 함
+    setHasMore(true);
   };
   
   const handleRecommendationClick = async () => {
@@ -184,6 +209,7 @@ export function FormPage() {
           </Swiper>
           <div ref={loader} className="h-10 flex items-center justify-center">
             {isLoading && <div>Loading...</div>}
+            {!hasMore && <div>모든 연극을 불러왔습니다.</div>}
           </div>
         </div>
       );
@@ -202,6 +228,7 @@ export function FormPage() {
           </div>
           <div ref={loader} className="h-10 flex items-center justify-center">
             {isLoading && <div>Loading...</div>}
+            {!hasMore && <div>모든 연극을 불러왔습니다.</div>}
           </div>
         </div>
       );
