@@ -74,7 +74,7 @@ function SearchResult() {
               whileHover={{ scale: 1.05 }}
             />
             <div className="lg:w-1/2">
-              <h2 className="text-4xl font-bold mb-6 text-yellow-500">{result.prfnm}</h2>
+              <h2 className="text-4xl font-bold mb-6 text-yellow-500">{data.prfnm}</h2>
               <p className="text-xl leading-relaxed mb-8 text-gray-700">
                 {data.sty}
               </p>
