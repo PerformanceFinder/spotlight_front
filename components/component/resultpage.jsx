@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Header } from "@/components/component/header";
 
 function SearchResult() {
   
@@ -50,6 +51,8 @@ function SearchResult() {
   }
 
   return (
+    <div>
+      <Header/>
     <div className="min-h-screen bg-white text-gray-800 p-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -149,6 +152,7 @@ function SearchResult() {
           </div>
         </div>
       </motion.div>
+    </div>
     </div>
   );
 }
