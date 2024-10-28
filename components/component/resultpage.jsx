@@ -8,10 +8,6 @@ import { motion } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 function SearchResult() {
-  const recommendedPlay = {
-    title: "햄릿",
-    posterUrl: "/placeholder.svg?height=600&width=400"
-  };
   
   const events = [
     { id: 1, title: "초대권 이벤트 (1)", imageUrl: "/placeholder.svg?height=300&width=400" },
@@ -69,25 +65,25 @@ function SearchResult() {
         <Card className="mb-16 bg-gray-100 shadow-lg overflow-hidden">
           <CardContent className="p-8 flex flex-col lg:flex-row items-center">
             <motion.img 
-              src={recommendedPlay.posterUrl} 
-              alt={`${recommendedPlay.title} 포스터`} 
+              src={result.poster} 
+              alt={`${result.prfnm} 포스터`} 
               className="w-full lg:w-2/5 h-auto rounded-lg shadow-xl mb-8 lg:mb-0 lg:mr-8 transform hover:scale-105 transition-transform duration-300"
               whileHover={{ scale: 1.05 }}
             />
             <div className="lg:w-1/2">
-              <h2 className="text-4xl font-bold mb-6 text-yellow-500">{recommendedPlay.title}</h2>
+              <h2 className="text-4xl font-bold mb-6 text-yellow-500">{result.prfnm}</h2>
               <p className="text-xl leading-relaxed mb-8 text-gray-700">
-                셰익스피어의 대표작 '햄릿'이 현대적 해석으로 새롭게 태어납니다. 
-                복수와 광기, 도덕적 딜레마를 다루는 이 비극은 관객 여러분에게 
-                깊은 감동과 새로운 통찰을 선사할 것입니다.
+                {result.sty}
               </p>
-              <motion.button
+              <motion.a
+                href= {result.relateurl1}// 여기서 URL을 지정하세요
+                target="_blank" // 새 탭에서 열리도록 하려면 추가
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-3 bg-black text-white rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300"
               >
                 예매하기
-              </motion.button>
+              </motion.a>
             </div>
           </CardContent>
         </Card>
