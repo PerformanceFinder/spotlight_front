@@ -65,18 +65,18 @@ function SearchResult() {
         <Card className="mb-16 bg-gray-100 shadow-lg overflow-hidden">
           <CardContent className="p-8 flex flex-col lg:flex-row items-center">
             <motion.img 
-              src={result.poster} 
-              alt={`${result.prfnm} 포스터`} 
+              src={data.poster} 
+              alt={`${data.prfnm} 포스터`} 
               className="w-full lg:w-2/5 h-auto rounded-lg shadow-xl mb-8 lg:mb-0 lg:mr-8 transform hover:scale-105 transition-transform duration-300"
               whileHover={{ scale: 1.05 }}
             />
             <div className="lg:w-1/2">
               <h2 className="text-4xl font-bold mb-6 text-yellow-500">{result.prfnm}</h2>
               <p className="text-xl leading-relaxed mb-8 text-gray-700">
-                {result.sty}
+                {data.sty}
               </p>
               <motion.a
-                href= {result.relateurl1}// 여기서 URL을 지정하세요
+                href= {data.relateurl1}// 여기서 URL을 지정하세요
                 target="_blank" // 새 탭에서 열리도록 하려면 추가
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
