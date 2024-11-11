@@ -101,7 +101,6 @@ export function RegionSelection() {
       <Header/>
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4">
         <div className="max-w-6xl mx-auto">
-          {/* Header Section */}
           <div className="text-center mb-12">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               추천받고 싶은 공연장 위치 선택
@@ -111,27 +110,23 @@ export function RegionSelection() {
             </p>
           </div>
 
-          {/* Error Message */}
           {errorMessage && (
             <div className="text-center text-red-500 font-medium mb-4">
               {errorMessage}
             </div>
           )}
 
-          {/* Selected Info */}
           <div className="flex justify-center gap-4 mb-8 text-sm text-gray-700">
             <span>선택된 지역: <strong>{selectedRegion || "미선택"}</strong></span>
             <span>•</span>
             <span>선택된 구역: <strong>{selectedArea || "미선택"}</strong></span>
           </div>
 
-          {/* Selection Cards */}
           <div className="grid md:grid-cols-2 gap-8 mb-8">
-            {/* Region Selection Card */}
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader className="border-b bg-gray-50">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <MapPin className="w-5 h-5 text-blue-500" />
+                  <MapPin className="w-5 h-5 text-yellow-300" />
                   지역 선택
                 </CardTitle>
               </CardHeader>
@@ -144,7 +139,7 @@ export function RegionSelection() {
                       className={`
                         flex items-center justify-between
                         ${selectedRegion === region 
-                          ? 'bg-blue-500 text-white hover:bg-blue-600' 
+                          ? 'bg-yellow-300 text-white hover:bg-yellow-400' 
                           : 'hover:bg-gray-50'
                         }
                         transition-all duration-200 transform hover:scale-105
@@ -159,14 +154,13 @@ export function RegionSelection() {
               </CardContent>
             </Card>
 
-            {/* Area Selection Card */}
             <Card className={`shadow-lg hover:shadow-xl transition-shadow duration-300 
               ${!selectedRegion ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
               <CardHeader className="border-b bg-gray-50">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <ChevronRight className="w-5 h-5 text-blue-500" />
+                  <ChevronRight className="w-5 h-5 text-yellow-300" />
                   구역 선택
-                  {selectedRegion && <span className="text-blue-500 ml-2">({selectedRegion})</span>}
+                  {selectedRegion && <span className="text-yellow-300 ml-2">({selectedRegion})</span>}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 h-[500px] overflow-y-auto custom-scrollbar">
@@ -179,7 +173,7 @@ export function RegionSelection() {
                         className={`
                           flex items-center justify-between
                           ${selectedArea === area 
-                            ? 'bg-blue-500 text-white hover:bg-blue-600' 
+                            ? 'bg-yellow-300 text-white hover:bg-yellow-400' 
                             : 'hover:bg-gray-50'
                           }
                           transition-all duration-200 transform hover:scale-105
@@ -200,13 +194,12 @@ export function RegionSelection() {
             </Card>
           </div>
 
-          {/* Submit Button */}
           <div className="flex flex-col items-center gap-6">
             <Button
               className={`px-8 py-6 text-lg font-semibold rounded-full
                 ${(!selectedRegion || !selectedArea) 
                   ? 'bg-gray-300 cursor-not-allowed' 
-                  : 'bg-blue-500 hover:bg-blue-600 hover:scale-105'
+                  : 'bg-yellow-300 hover:bg-yellow-400 hover:scale-105'
                 }
                 transform transition-all duration-300 shadow-lg hover:shadow-xl h-auto
               `}
