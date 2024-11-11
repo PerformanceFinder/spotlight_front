@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Header } from "@/components/component/header";
+import { TheatreNotification } from "@/components/theatre-notification";
 
 function SearchResult() {
   
@@ -53,6 +54,7 @@ function SearchResult() {
   return (
     <div>
       <Header />
+      <TheatreNotification/>
       <div className="min-h-screen bg-gray-50 text-gray-800 p-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
