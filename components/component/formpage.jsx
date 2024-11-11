@@ -57,7 +57,6 @@ export function FormPage() {
         id: play.mt20id,
         title: play.prfnm,
         image: play.poster,
-        description: play.sty || play.syn,
       })),
     ]);
 
@@ -73,7 +72,6 @@ export function FormPage() {
         id: play.mt20id,
         title: play.prfnm,
         image: play.poster,
-        description: play.syn,
       }));
 
       setPlays(formattedPlays);
@@ -224,11 +222,8 @@ export function FormPage() {
 }
 
 function PlayCard({ play, isSelected, onSelect }) {
-  const [showDescription, setShowDescription] = useState(false);
-
   const handleClick = () => {
     onSelect(play.id);
-    setShowDescription(!showDescription);
   };
 
   return (
@@ -242,13 +237,8 @@ function PlayCard({ play, isSelected, onSelect }) {
         <img
           src={play.image}
           alt={play.title}
-          className={`absolute top-0 left-0 w-full h-full object-cover transition-all duration-300 ${showDescription ? "blur-sm" : ""}`}
+          className="absolute top-0 left-0 w-full h-full object-cover transition-all duration-300"
         />
-        {showDescription && (
-          <div className="absolute inset-0 flex items-center justify-center p-4 bg-black bg-opacity-50 transition-opacity duration-300">
-            <p className="text-white text-sm overflow-y-auto max-h-full">{play.description}</p>
-          </div>
-        )}
         {isSelected && (
           <div className="absolute top-2 right-2 flex flex-col items-center">
             <div className="bg-primary text-primary-foreground rounded-full p-2 mb-1">
