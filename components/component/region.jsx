@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, createContext, useContext } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -72,15 +72,18 @@ const regions = {
 export function RegionSelection() {
   const [selectedRegion, setSelectedRegion] = useState('');
   const [selectedArea, setSelectedArea] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
   const handleRegionSelect = (region) => {
     setSelectedRegion(region);
     setSelectedArea('');
+    setErrorMessage('');
   };
 
   const handleAreaSelect = (area) => {
     setSelectedArea(area);
+    setErrorMessage('');
   };
 
   const handleSubmit = () => {
@@ -89,143 +92,150 @@ export function RegionSelection() {
       sessionStorage.setItem('selectedArea', selectedArea);
       router.push('/form');
     } else {
-      alert('지역과 구역을 모두 선택해주세요.');
+      setErrorMessage('지역과 구역을 모두 선택해주세요.');
     }
   };
 
   return (
     <div>
-    <Header/>
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4">
-      
-      <div className="max-w-6xl mx-auto">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            추천받고 싶은 공연장 위치 선택
-          </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            원하시는 지역을 선택하시면 해당 지역의 추천 공연장을 안내해드립니다.
-          </p>
-        </div>
+      <Header/>
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          {/* Header Section */}
+          <div className="text-center mb-12">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              추천받고 싶은 공연장 위치 선택
+            </h1>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              원하시는 지역을 선택하시면 해당 지역의 추천 공연장을 안내해드립니다.
+            </p>
+          </div>
 
-        {/* Selection Cards */}
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
-          {/* Region Selection Card */}
-          <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <CardHeader className="border-b bg-gray-50">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <MapPin className="w-5 h-5 text-blue-500" />
-                지역 선택
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 h-[500px] overflow-y-auto custom-scrollbar">
-              <div className="grid grid-cols-2 gap-2">
-                {Object.keys(regions).map((region) => (
-                  <Button
-                    key={region}
-                    variant={selectedRegion === region ? "default" : "outline"}
-                    className={`
-                      flex items-center justify-between
-                      ${selectedRegion === region 
-                        ? 'bg-blue-500 text-white hover:bg-blue-600' 
-                        : 'hover:bg-gray-50'
-                      }
-                      transition-all duration-200
-                    `}
-                    onClick={() => handleRegionSelect(region)}
-                  >
-                    <span>{region}</span>
-                    {selectedRegion === region && <Check className="w-4 h-4 ml-2" />}
-                  </Button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="text-center text-red-500 font-medium mb-4">
+              {errorMessage}
+            </div>
+          )}
 
-          {/* Area Selection Card */}
-          <Card className={`shadow-lg hover:shadow-xl transition-shadow duration-300 
-            ${!selectedRegion ? 'opacity-50' : 'opacity-100'}`}>
-            <CardHeader className="border-b bg-gray-50">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <ChevronRight className="w-5 h-5 text-blue-500" />
-                구역 선택
-                {selectedRegion && <span className="text-blue-500 ml-2">({selectedRegion})</span>}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 h-[500px] overflow-y-auto custom-scrollbar">
-              {selectedRegion ? (
-                <div className="grid grid-cols-2 gap-2">
-                  {regions[selectedRegion].map((area) => (
-                    <Button
-                      key={area}
-                      variant={selectedArea === area ? "default" : "outline"}
-                      className={`
-                        flex items-center justify-between
-                        ${selectedArea === area 
-                          ? 'bg-blue-500 text-white hover:bg-blue-600' 
-                          : 'hover:bg-gray-50'
-                        }
-                        transition-all duration-200
-                      `}
-                      onClick={() => handleAreaSelect(area)}
-                    >
-                      <span>{area}</span>
-                      {selectedArea === area && <Check className="w-4 h-4 ml-2" />}
-                    </Button>
-                  ))}
-                </div>
-              ) : (
-                <div className="h-full flex items-center justify-center text-gray-500">
-                  지역을 먼저 선택해주세요
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Selected Info & Submit Button */}
-        <div className="flex flex-col items-center gap-6">
-          <div className="flex gap-4 text-sm text-gray-600">
+          {/* Selected Info */}
+          <div className="flex justify-center gap-4 mb-8 text-sm text-gray-700">
             <span>선택된 지역: <strong>{selectedRegion || "미선택"}</strong></span>
             <span>•</span>
             <span>선택된 구역: <strong>{selectedArea || "미선택"}</strong></span>
           </div>
-          
-          <Button
-            className={`px-8 py-6 text-lg font-semibold rounded-full
-              ${(!selectedRegion || !selectedArea) 
-                ? 'bg-gray-300 cursor-not-allowed' 
-                : 'bg-blue-500 hover:bg-blue-600 hover:scale-105'
-              }
-              transform transition-all duration-300 shadow-lg hover:shadow-xl h-auto
-            `}
-            onClick={handleSubmit}
-            disabled={!selectedRegion || !selectedArea}
-          >
-            선택 완료
-          </Button>
-        </div>
-      </div>
 
-      <style jsx global>{`
-        .custom-scrollbar {
-          scrollbar-width: thin;
-          scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: rgba(155, 155, 155, 0.5);
-          border-radius: 20px;
-          border: transparent;
-        }
-      `}</style>
-    </div>
+          {/* Selection Cards */}
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            {/* Region Selection Card */}
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardHeader className="border-b bg-gray-50">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <MapPin className="w-5 h-5 text-blue-500" />
+                  지역 선택
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 h-[500px] overflow-y-auto custom-scrollbar">
+                <div className="grid grid-cols-2 gap-2">
+                  {Object.keys(regions).map((region) => (
+                    <Button
+                      key={region}
+                      variant={selectedRegion === region ? "default" : "outline"}
+                      className={`
+                        flex items-center justify-between
+                        ${selectedRegion === region 
+                          ? 'bg-blue-500 text-white hover:bg-blue-600' 
+                          : 'hover:bg-gray-50'
+                        }
+                        transition-all duration-200 transform hover:scale-105
+                      `}
+                      onClick={() => handleRegionSelect(region)}
+                    >
+                      <span>{region}</span>
+                      {selectedRegion === region && <Check className="w-4 h-4 ml-2" />}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Area Selection Card */}
+            <Card className={`shadow-lg hover:shadow-xl transition-shadow duration-300 
+              ${!selectedRegion ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+              <CardHeader className="border-b bg-gray-50">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <ChevronRight className="w-5 h-5 text-blue-500" />
+                  구역 선택
+                  {selectedRegion && <span className="text-blue-500 ml-2">({selectedRegion})</span>}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 h-[500px] overflow-y-auto custom-scrollbar">
+                {selectedRegion ? (
+                  <div className="grid grid-cols-2 gap-2">
+                    {regions[selectedRegion].map((area) => (
+                      <Button
+                        key={area}
+                        variant={selectedArea === area ? "default" : "outline"}
+                        className={`
+                          flex items-center justify-between
+                          ${selectedArea === area 
+                            ? 'bg-blue-500 text-white hover:bg-blue-600' 
+                            : 'hover:bg-gray-50'
+                          }
+                          transition-all duration-200 transform hover:scale-105
+                        `}
+                        onClick={() => handleAreaSelect(area)}
+                      >
+                        <span>{area}</span>
+                        {selectedArea === area && <Check className="w-4 h-4 ml-2" />}
+                      </Button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="h-full flex items-center justify-center text-gray-500">
+                    지역을 먼저 선택해주세요
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex flex-col items-center gap-6">
+            <Button
+              className={`px-8 py-6 text-lg font-semibold rounded-full
+                ${(!selectedRegion || !selectedArea) 
+                  ? 'bg-gray-300 cursor-not-allowed' 
+                  : 'bg-blue-500 hover:bg-blue-600 hover:scale-105'
+                }
+                transform transition-all duration-300 shadow-lg hover:shadow-xl h-auto
+              `}
+              onClick={handleSubmit}
+              disabled={!selectedRegion || !selectedArea}
+            >
+              선택 완료
+            </Button>
+          </div>
+        </div>
+
+        <style jsx global>{`
+          .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+          }
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(155, 155, 155, 0.5);
+            border-radius: 20px;
+            border: transparent;
+          }
+        `}</style>
+      </div>
     </div>
   );
 }

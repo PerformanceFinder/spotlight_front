@@ -1,19 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
 import { Header } from "@/components/component/header";
-
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
 export function FormPage() {
   const [plays, setPlays] = useState([]);
-  const [displayedIds, setDisplayedIds] = useState(new Set()); // 이미 표시된 ID들을 추적
+  const [displayedIds, setDisplayedIds] = useState(new Set());
   const [selectedPlays, setSelectedPlays] = useState([]);
   const [tokenData, setTokenData] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -21,7 +15,7 @@ export function FormPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true); // 더 불러올 데이터가 있는지 추적
+  const [hasMore, setHasMore] = useState(true);
   const loader = useRef(null);
   const router = useRouter();
 
@@ -94,11 +88,9 @@ export function FormPage() {
       
       let url;
       if (selectedPlays.length > 0) {
-        // 선택된 연극이 있는 경우 추천 API 호출
         const selectedIds = selectedPlays.join(',');
         url = `https://artause.co.kr/userselect?plays=${selectedIds}`;
       } else {
-        // 선택된 연극이 없는 경우 기본 20개 로드
         url = `https://artause.co.kr/api/data?page=${page}&limit=20`;
       }
 
@@ -119,7 +111,6 @@ export function FormPage() {
     }
   }, [isLoading, page, selectedPlays, hasMore, displayedIds]);
 
-  // Intersection Observer 설정
   useEffect(() => {
     if (!hasMore) return;
 
@@ -154,7 +145,6 @@ export function FormPage() {
     } else {
       setSelectedPlays([...selectedPlays, playId]);
     }
-    // 선택이 변경될 때 hasMore를 true로 리셋하여 새로운 추천을 가능하게 함
     setHasMore(true);
   };
   
@@ -186,53 +176,24 @@ export function FormPage() {
   };
   
   const renderPlays = () => {
-    if (isMobile) {
-      return (
-        <div>
-          <Swiper
-            modules={[Navigation, Pagination]}
-            spaceBetween={10}
-            slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-            className="w-full pb-12"
-          >
-            {plays.map((play) => (
-              <SwiperSlide key={play.id} className="w-full">
-                <PlayCard 
-                  play={play} 
-                  isSelected={selectedPlays.includes(play.id)} 
-                  onSelect={handlePlaySelection} 
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-          <div ref={loader} className="h-10 flex items-center justify-center">
-            {isLoading && <div>Loading...</div>}
-            {!hasMore && <div>모든 연극을 불러왔습니다.</div>}
-          </div>
+    return (
+      <div>
+        <div className={`grid grid-cols-2 gap-4 ${isMobile ? '' : 'sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'}`}>
+          {plays.map((play) => (
+            <PlayCard 
+              key={play.id} 
+              play={play} 
+              isSelected={selectedPlays.includes(play.id)} 
+              onSelect={handlePlaySelection} 
+            />
+          ))}
         </div>
-      );
-    } else {
-      return (
-        <div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {plays.map((play) => (
-              <PlayCard 
-                key={play.id} 
-                play={play} 
-                isSelected={selectedPlays.includes(play.id)} 
-                onSelect={handlePlaySelection} 
-              />
-            ))}
-          </div>
-          <div ref={loader} className="h-10 flex items-center justify-center">
-            {isLoading && <div>Loading...</div>}
-            {!hasMore && <div>모든 연극을 불러왔습니다.</div>}
-          </div>
+        <div ref={loader} className="h-10 flex items-center justify-center">
+          {isLoading && <div>Loading...</div>}
+          {!hasMore && <div>모든 연극을 불러왔습니다.</div>}
         </div>
-      );
-    }
+      </div>
+    );
   };
 
   return (

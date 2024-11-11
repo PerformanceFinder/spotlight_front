@@ -9,7 +9,6 @@ export default function Home() {
     window.location.href = KAKAO_AUTH_URL;
   };
 
- 
   return (
     <div className="min-h-screen bg-gradient-to-b from-yellow-50 via-yellow-100 to-yellow-200 relative overflow-hidden">
       <Header/>
@@ -30,11 +29,11 @@ export default function Home() {
             Spotlight이 직접 취향을 분석해 맞춤 연극을 추천해드려요!
           </p>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             <Button variant="default" className="p-0 overflow-hidden" onClick={kakaoLogin}>
               <img
                 src="/kakao_login_large_wide.png"
-                alt="카카오 로그인"
+                alt="카카오 로그인 버튼을 클릭하여 연극 맞춤 추천 서비스를 받아보세요"
                 width={240}
                 height={54}
                 onClick={kakaoLogin}
@@ -42,12 +41,35 @@ export default function Home() {
               />
             </Button>
             <p className="text-sm text-gray-600 max-w-md mx-auto">
-              Spotlight 카카오톡 채널을 통해 맞춤형 연극을 제공해드립니다. 
+              Spotlight 카카오톡 채널을 통해 맞춤형 연극을 제공해드립니다.
             </p>
             <p className="text-sm text-gray-600 max-w-md mx-auto">
-              카카오톡 채널 수신 거부 시 연극 정보 제공이 어렵습니다. 
+              카카오톡 채널 수신 거부 시 연극 정보 제공이 어렵습니다.
             </p>
+          </div>
 
+          <div className="space-y-4 mt-8">
+            <p className="text-lg text-gray-800 font-semibold">다른 소셜 계정으로 로그인하기</p>
+            <div className="flex justify-center space-x-4">
+              <Button variant="default" className="p-2" onClick={() => alert("Google 로그인 기능 준비 중입니다.")}>
+                <img
+                  src="/google_login.png"
+                  alt="Google 로그인"
+                  width={48}
+                  height={48}
+                  style={{ cursor: 'pointer' }}
+                />
+              </Button>
+              <Button variant="default" className="p-2" onClick={() => alert("Facebook 로그인 기능 준비 중입니다.")}>
+                <img
+                  src="/facebook_login.png"
+                  alt="Facebook 로그인"
+                  width={48}
+                  height={48}
+                  style={{ cursor: 'pointer' }}
+                />
+              </Button>
+            </div>
           </div>
         </div>
       </main>
