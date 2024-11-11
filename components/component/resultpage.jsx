@@ -54,7 +54,7 @@ function SearchResult() {
   return (
     <div>
       <Header />
-      
+      <TheatreNotification/>
       <div className="min-h-screen bg-gray-50 text-gray-800 p-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -124,32 +124,31 @@ function SearchResult() {
           </Carousel>
 
           <div className="container mx-auto px-4 mt-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data === null ? (
-              <p className="col-span-3 text-center text-lg text-gray-500">No data available.</p>
-            ) : (
-              data.map((play) => (
-                <Card key={play.mt20id} className="flex flex-col h-full shadow-md hover:shadow-lg transition-shadow duration-300">
-                  <CardContent className="flex-grow p-4">
-                    <img src={play.poster} alt={play.prfnm} className="w-full h-64 object-cover rounded-lg mb-4" />
-                    <h3 className="text-lg font-semibold mb-2 text-yellow-700">{play.prfnm}</h3>
-                  </CardContent>
-                  <CardFooter className="bg-gray-100 p-4 rounded-b-lg flex flex-col items-start">
-                    <p className="text-sm text-gray-600 line-clamp-3 mb-4">{play.sty || "작품설명 없음"}</p>
-                    {play.relateurl1 && (
-                      <Button 
-                        onClick={() => window.open(play.relateurl1, '_blank')}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
-                      >
-                        연극 예매하기!
-                      </Button>
-                    )}
-                  </CardFooter>
-                </Card>
-              ))
-            )}
-          </div>
-
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.isArray(data) ? (
+                data.map((play) => (
+                  <Card key={play.mt20id} className="flex flex-col h-full shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="flex-grow p-4">
+                      <img src={play.poster} alt={play.prfnm} className="w-full h-64 object-cover rounded-lg mb-4" />
+                      <h3 className="text-lg font-semibold mb-2 text-yellow-700">{play.prfnm}</h3>
+                    </CardContent>
+                    <CardFooter className="bg-gray-100 p-4 rounded-b-lg flex flex-col items-start">
+                      <p className="text-sm text-gray-600 line-clamp-3 mb-4">{play.sty || "작품설명 없음"}</p>
+                      {play.relateurl1 && (
+                        <Button 
+                          onClick={() => window.open(play.relateurl1, '_blank')}
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+                        >
+                          연극 예매하기!
+                        </Button>
+                      )}
+                    </CardFooter>
+                  </Card>
+                ))
+              ) : (
+                <p className="col-span-3 text-center text-lg text-gray-500">No data available.</p>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>
