@@ -48,29 +48,6 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="space-y-4 mt-8">
-            <p className="text-lg text-gray-800 font-semibold">다른 소셜 계정으로 로그인하기</p>
-            <div className="flex justify-center space-x-4">
-              <Button variant="default" className="p-2" onClick={() => alert("Google 로그인 기능 준비 중입니다.")}>
-                <img
-                  src="/google_login.png"
-                  alt="Google 로그인"
-                  width={48}
-                  height={48}
-                  style={{ cursor: 'pointer' }}
-                />
-              </Button>
-              <Button variant="default" className="p-2" onClick={() => alert("Facebook 로그인 기능 준비 중입니다.")}>
-                <img
-                  src="/facebook_login.png"
-                  alt="Facebook 로그인"
-                  width={48}
-                  height={48}
-                  style={{ cursor: 'pointer' }}
-                />
-              </Button>
-            </div>
-          </div>
         </div>
       </main>
 
