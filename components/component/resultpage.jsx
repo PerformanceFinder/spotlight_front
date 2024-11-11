@@ -32,7 +32,7 @@ function SearchResult() {
   const fetchPlays = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`https://artause.co.kr/final?plays=${keyword}`);
+      const response = await fetch(`https://artause.co.kr/result?plays=${keyword}`);
       const result = await response.json();
       setData(result);
     } catch (error) {
