@@ -54,7 +54,7 @@ function SearchResult() {
   return (
     <div>
       <Header />
-      <TheatreNotification/>
+      
       <div className="min-h-screen bg-gray-50 text-gray-800 p-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
