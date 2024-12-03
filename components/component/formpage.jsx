@@ -41,22 +41,22 @@ export function FormPage() {
   };
 
   const addNewPlaysWithoutDuplicates = (newPlays) => {
-    const uniquePlays = newPlays.filter((play) => !displayedIds.has(play.mt20id));
+    const uniquePlays = newPlays.filter((play) => !displayedIds.has(play.rank));
 
     if (uniquePlays.length === 0) {
       setHasMore(false);
       return false;
     }
 
-    const newIds = new Set(uniquePlays.map((play) => play.mt20id));
+    const newIds = new Set(uniquePlays.map((play) => play.rank));
     setDisplayedIds((prev) => new Set([...prev, ...newIds]));
 
     setPlays((prevPlays) => [
       ...prevPlays,
       ...uniquePlays.map((play) => ({
-        id: play.mt20id,
-        title: play.prfnm,
-        image: play.poster,
+        id: play.rank,
+        title: play.title,
+        image: play.posterLink,
       })),
     ]);
 
@@ -69,9 +69,9 @@ export function FormPage() {
       const data = await response.json();
 
       const formattedPlays = data.map((play) => ({
-        id: play.mt20id,
-        title: play.prfnm,
-        image: play.poster,
+        id: play.rank,
+        title: play.title,
+        image: play.posterLink,
       }));
 
       setPlays(formattedPlays);
@@ -199,7 +199,6 @@ export function FormPage() {
       </div>
     );
   };
-  
 
   return (
     <div>
